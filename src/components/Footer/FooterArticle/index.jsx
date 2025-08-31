@@ -4,6 +4,8 @@ export default function FooterArtikel({ articles }) {
   // cuma ambil 2 artikel pertama
   const latestArticles = articles.slice(0, 2);
 
+  if (!latestArticles || latestArticles.length < 0) return null;
+
   return (
     <div className="flex flex-col items-center gap-2">
       <h3 className="text-2xl font-semibold">Artikel</h3>

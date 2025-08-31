@@ -45,7 +45,7 @@ export default function Home() {
       <section className="w-full">
         <Hero ref={(el) => (videosRef.current[0] = el)} />
       </section>
-      <section className="w-full p-8 bg-white">
+      <section className="w-full py-8 px-4 bg-white">
         <div className="w-full flex flex-col md:flex-row  bg-primary text-white p-4">
           <div className="md:w-1/2 md:px-8 mb-4 md:mb-0">
             <div className="my-8 mx-auto">
@@ -65,7 +65,7 @@ export default function Home() {
               <p className="text-justify">
                 SCA APPAREL adalah usaha yang bergerak di bidang pembuatan
                 pakaian custom dengan kualitas tinggi dan desain yang dapat
-                disesuaikan sep enuhnya dengan keinginan p elanggan. Kami
+                disesuaikan sep enuhnya dengan keinginan pelanggan. Kami
                 melayani berbagai kebutuhan fashion dan seragam, baik untuk
                 keperluan personal, komunitas, bisnis, hingga event berskala
                 besar. Kami percaya bahwa setiap orang dan organisasi memiliki
@@ -135,7 +135,7 @@ export default function Home() {
         </div>
       </section>
       <div>
-        <section className="w-full relative bg-primary text-white p-12 z-0">
+        <section className="w-full relative bg-primary text-white py-12 px-4 z-0">
           <div className="flex flex-col gap-4 md:flex-row">
             <div className="md:w-1/2">
               <h1 className="font-black text-3xl md:text-4xl lg:text-5xl mb-8 text-center md:text-left">
@@ -363,11 +363,17 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="text-white flex gap-4 md:gap-24  lg:gap-52 justify-center mt-6 mb-4">
-            <Link href={"/"} className="p-4 bg-primary rounded-lg shadow-lg">
+          <div className="text-white flex gap-4 md:gap-24 px-4  lg:gap-52 justify-center mt-6 mb-4">
+            <Link
+              href={"/"}
+              className="p-2 md:p-4 bg-primary rounded-lg shadow-lg"
+            >
               WhatsApp Admin 1
             </Link>
-            <Link href={"/"} className="p-4 bg-primary rounded-lg shadow-lg">
+            <Link
+              href={"/"}
+              className="p-2 md:p-4 bg-primary rounded-lg shadow-lg"
+            >
               WhatsApp Admin 2
             </Link>
           </div>
