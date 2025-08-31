@@ -69,7 +69,7 @@ const Navbar = () => {
             value={search}
             onChange={handleSearch}
             placeholder="Cari produk..."
-            className="w-96 h-7 rounded-full shadow-2xl bg-slate-200 text-slate-800 px-4"
+            className="w-80 h-7 rounded-full shadow-2xl bg-slate-200 text-slate-800 px-4"
           />
           {isLoading && (
             <div className="bg-white border mt-2 rounded shadow-md max-h-60 overflow-y-auto absolute z-30 w-full text-center">
