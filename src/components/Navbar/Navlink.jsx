@@ -6,6 +6,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { products } from "@/lib/products";
 import { Montserrat } from "next/font/google";
 import { usePathname } from "next/navigation";
+import { FaWhatsapp } from "react-icons/fa";
 
 const quicksand = Montserrat({
   subsets: ["latin"],
@@ -29,8 +30,15 @@ const Navlink = () => {
   }, []);
   return (
     <div
-      className={`flex text-lg pl-4  lg:text-xl items-baseline space-x-2 lg:space-x-8 h-full ${quicksand.className}`}
+      className={`flex flex-col md:flex-row text-lg pl-4  lg:text-xl items-baseline space-x-2 lg:space-x-8 space-y-2 md:space-y-0 h-full ${quicksand.className}`}
     >
+      <Link
+        href={"/"}
+        className="p-2 rounded bg-primary text-white text-lg font-semibold flex gap-1 items-center"
+      >
+        <FaWhatsapp size={24} />
+        Chat With Us
+      </Link>
       <Link
         href={"/"}
         className={`font-semibold group relative ${
@@ -69,7 +77,11 @@ const Navlink = () => {
         </button>
 
         {isOpen && (
-          <div className="absolute top-full left-0 mt-2 w-48 bg-white border rounded shadow-lg z-50">
+          <div
+            className=" md:absolute md:top-full md:left-0 md:mt-2
+      w-full md:w-48  md:bg-white border-b md:border  md:rounded md:shadow-lg z-50
+      flex flex-col"
+          >
             <ul>
               {products.map((product, index) => (
                 <li

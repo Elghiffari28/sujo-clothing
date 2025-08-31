@@ -290,7 +290,7 @@ export default function Home() {
         </div>
       </section>
       <section className="bg-white w-full ">
-        <div className="flex flex-col justify-center items-center lg:p-6 md:p-12">
+        <div className="flex flex-col justify-center items-center p-2 lg:p-6 md:p-12">
           <div className="flex flex-col justify-center items-center px-4 md:px-8">
             <div className="flex gap-4 mb-4 items-center justify-start">
               <h3>Sekilas Tentang</h3>
