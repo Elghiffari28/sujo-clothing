@@ -16,7 +16,7 @@ const index = () => {
     );
   }
   return (
-    <div className="bg-white p-6 md:p-12 w-full">
+    <div className="bg-white py-6 md:p-12 w-full">
       <div className="bg-primary text-white p-6 md:p-12">
         <div className="px-4">
           <Image
@@ -69,7 +69,7 @@ const index = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4 md:gap-8 mt-12">{image}</div>
+      <div className="grid grid-cols-2 px-2 gap-4 md:gap-8 mt-12">{image}</div>
     </div>
   );
 };

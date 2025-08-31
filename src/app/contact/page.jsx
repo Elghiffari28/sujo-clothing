@@ -4,30 +4,30 @@ import { FaEnvelope, FaMobile, FaPhone } from "react-icons/fa";
 
 const page = () => {
   return (
-    <div className="bg-white w-full p-12">
+    <div className="bg-white w-full py-12 px-6">
       <div className="flex flex-col md:flex-row w-full justify-center items-center">
-        <div className="flex w-full justify-center flex-col items-center gap-6 px-0 lg:px-20 mb-8 md:mb-0">
+        <div className="flex w-full justify-center flex-col items-center gap-6 px-2 lg:px-20 mb-8 md:mb-0">
           <h3 className="text-4xl font-bold">Kontak</h3>
-          <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-            <p className="flex gap-2 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2 ">
+            <p className="flex gap-1 items-center justify-center md:justify-start text-center">
               <span className="text-green-500">
                 <FaMobile size={24} />
               </span>
               082120764767
             </p>
-            <p className="flex gap-2 items-center">
+            <p className="flex gap-1 items-center justify-center md:justify-start text-center">
               <span className="text-green-500">
                 <FaPhone size={20} />
               </span>
               082120764767
             </p>
-            <p className="flex gap-2 items-center">
+            <p className="flex gap-1 items-center justify-center md:justify-start text-center">
               <span className="text-green-500">
                 <FaPhone size={20} />
               </span>
               082120764767
             </p>
-            <p className="flex gap-2 items-center">
+            <p className="flex gap-1 items-center justify-center md:justify-start text-center break-all">
               <span className="text-green-500">
                 <FaEnvelope size={20} />
               </span>

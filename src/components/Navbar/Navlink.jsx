@@ -34,7 +34,7 @@ const Navlink = () => {
     >
       <Link
         href={"/"}
-        className="p-2 rounded bg-primary text-white text-lg font-semibold flex gap-1 items-center"
+        className="md:hidden p-2 rounded bg-primary text-white text-lg font-semibold flex gap-1 items-center"
       >
         <FaWhatsapp size={24} />
         Chat With Us
