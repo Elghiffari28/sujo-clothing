@@ -5,6 +5,11 @@ import { products } from "@/lib/products";
 import HeroProduk from "@/components/Produk/HeroProduk";
 import Image from "next/image";
 
+export const metadata = {
+  title: "Daftar Produk | Sujo Clothing",
+  description: "Lihat semua produk terbaru",
+};
+
 const page = () => {
   const params = useParams(); // ambil semua param route
   const id = params.id;
