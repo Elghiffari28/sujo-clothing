@@ -4,10 +4,10 @@ import HeroProduk from "@/components/Produk/HeroProduk";
 import Image from "next/image";
 import souvenir from "@/lib/souvenir";
 
-export const metadata = {
-  title: "Daftar Souvenir | Sujo Clothing",
-  description: "Lihat semua souvenir terbaru",
-};
+// export const metadata = {
+//   title: "Daftar Souvenir | Sujo Clothing",
+//   description: "Lihat semua souvenir terbaru",
+// };
 
 const page = () => {
   if (!souvenir) return <p>Produk tidak ditemukan</p>;

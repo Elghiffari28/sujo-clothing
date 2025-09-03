@@ -2,10 +2,10 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
-export const metadata = {
-  title: "Daftar Testimoni | Sujo Clothing",
-  description: "Lihat semua testimoni terbaru",
-};
+// export const metadata = {
+//   title: "Daftar Testimoni | Sujo Clothing",
+//   description: "Lihat semua testimoni terbaru",
+// };
 
 const page = () => {
   const [testimoni, setTestimoni] = useState([]);

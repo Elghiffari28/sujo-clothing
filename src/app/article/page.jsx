@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import ArtikelCard from "@/components/ArticleCard";
 
-export const metadata = {
-  title: "Daftar Artikel | Sujo Clothing",
-  description: "Lihat semua artikel terbaru",
-};
+// export const metadata = {
+//   title: "Daftar Artikel | Sujo Clothing",
+//   description: "Lihat semua artikel terbaru",
+// };
 
 export default function ArtikelList() {
   const [artikels, setArtikels] = useState([]);
