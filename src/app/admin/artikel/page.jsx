@@ -5,10 +5,10 @@ import Editor from "@/components/Editor";
 import Image from "next/image";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Daftar Artikel | Sujo Clothing",
-  description: "Lihat semua artikel terbaru",
-};
+// export const metadata = {
+//   title: "Daftar Artikel | Sujo Clothing",
+//   description: "Lihat semua artikel terbaru",
+// };
 
 export default function NewArticlePage() {
   const [artikels, setArtikels] = useState([]);
