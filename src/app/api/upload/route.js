@@ -1,32 +1,33 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { supabase } from "@/lib/supabase";
 
 export async function POST(req) {
-  const formData = await req.formData();
-  const file = formData.get("file");
+  try {
+    const formData = await req.formData();
+    const file = formData.get("file");
 
-  if (!file) {
-    return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+    if (!file) {
+      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+    }
+
+    // generate nama unik
+    const fileName = `${Date.now()}-${file.name}`;
+
+    // upload ke Supabase Storage (bucket: "testimoni")
+    const { data, error } = await supabase.storage
+      .from("testimoni")
+      .upload(fileName, file);
+
+    if (error) throw error;
+
+    // ambil public URL
+    const { data: publicUrl } = supabase.storage
+      .from("testimoni")
+      .getPublicUrl(fileName);
+
+    return NextResponse.json({ url: publicUrl.publicUrl });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
-
-  // bikin buffer dari file upload
-  const bytes = await file.arrayBuffer();
-  const buffer = Buffer.from(bytes);
-
-  // simpan di folder public/uploads
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-  }
-
-  const filename = `${Date.now()}-${file.name}`;
-  const filePath = path.join(uploadDir, filename);
-
-  fs.writeFileSync(filePath, buffer);
-
-  // url public (akses via /uploads/filename)
-  const url = `/uploads/${filename}`;
-
-  return NextResponse.json({ url });
 }

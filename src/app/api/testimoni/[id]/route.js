@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 
 export async function GET(req, { params }) {
@@ -12,7 +13,19 @@ export async function GET(req, { params }) {
 export async function PUT(req, { params }) {
   try {
     const { id } = params;
+
+    if (isNaN(Number(id))) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    }
+
     const body = await req.json();
+
+    if (!body.keterangan && !body.imageUrl) {
+      return NextResponse.json(
+        { error: "Tidak ada data untuk update" },
+        { status: 400 }
+      );
+    }
 
     const updated = await prisma.testimoni.update({
       where: { id: Number(id) },
@@ -22,9 +35,9 @@ export async function PUT(req, { params }) {
       },
     });
 
-    return Response.json(updated);
+    return NextResponse.json(updated);
   } catch (e) {
-    return Response.json({ error: e.message }, { status: 400 });
+    return NextResponse.json({ error: e.message }, { status: 400 });
   }
 }
 
