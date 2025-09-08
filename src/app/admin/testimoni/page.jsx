@@ -10,8 +10,12 @@ const page = () => {
   const [editingId, setEditingId] = useState(null);
 
   const getTesti = async () => {
-    const res = await fetch("/api/testimoni");
-    setTestimonis(await res.json());
+    try {
+      const res = await fetch("/api/testimoni");
+      setTestimonis(await res.json());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSubmit = async (e) => {

@@ -7,9 +7,13 @@ const page = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch("/api/testimoni");
-      const data = await res.json();
-      setTestimoni(data);
+      try {
+        const res = await fetch("/api/testimoni");
+        const data = await res.json();
+        setTestimoni(data);
+      } catch (error) {
+        console.log(error);
+      }
     };
     fetchData();
   }, []);
@@ -63,6 +67,7 @@ const page = () => {
               key={item.id}
               className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white"
             >
+              {console.log(item.imageUrl)}
               <div className="relative w-full h-40">
                 <Image
                   src={item.imageUrl}

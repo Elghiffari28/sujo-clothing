@@ -2,7 +2,12 @@ import Image from "next/image";
 
 export default function FooterArtikel({ articles }) {
   // cuma ambil 2 artikel pertama
-  const latestArticles = articles.slice(0, 2);
+  let latestArticles;
+  if (!articles.length) {
+    return null;
+  } else {
+    latestArticles = articles.slice(0, 2);
+  }
 
   if (!latestArticles || latestArticles.length < 0) return null;
 
