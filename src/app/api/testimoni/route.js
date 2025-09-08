@@ -11,25 +11,24 @@ export async function GET() {
 
 export async function POST(req) {
   try {
-    const formData = await req.formData();
-    const keterangan = formData.get("keterangan");
-    const file = formData.get("file");
+    const body = await req.json();
 
-    if (!file) {
-      return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
+    if (!body.keterangan || !body.imageUrl) {
+      return NextResponse.json(
+        { error: "keterangan dan imageUrl wajib diisi" },
+        { status: 400 }
+      );
     }
 
-    // upload ke Supabase
-    const imageUrl = await uploadToSupabase(file, "testimoni");
-
-    // simpan URL ke database
     const testimoni = await prisma.testimoni.create({
-      data: { keterangan, imageUrl },
+      data: {
+        keterangan: body.keterangan,
+        imageUrl: body.imageUrl,
+      },
     });
 
     return NextResponse.json(testimoni);
-  } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (e) {
+    return NextResponse.json({ error: e.message }, { status: 500 });
   }
 }
