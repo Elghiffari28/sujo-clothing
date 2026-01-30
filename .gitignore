@@ -43,3 +43,9 @@ next-env.d.ts
 /src/generated/prisma
 
 .vercel
+
+*.jpg
+*.png
+*.mp4
+*.zip
+*.sql

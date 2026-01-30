@@ -13,9 +13,10 @@ export default function ArtikelCard({ artikel }) {
         {artikel.imageUrl && (
           <div className="relative w-full aspect-[16/9] mb-3">
             <Image
-              src={artikel.imageUrl}
+              src={`/api${artikel.imageUrl}`}
               alt={artikel.title}
               fill
+              unoptimized
               className="object-cover rounded-lg"
             />
           </div>

@@ -1,60 +1,83 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
-import prisma from "@/lib/prisma";
+import { Artikel, initDB } from "@/lib/db";
+import path from "path";
+import { unlink } from "fs/promises";
 
-// GET /api/articles/[id]
+// GET /api/artikel/[id]
 export async function GET(req, context) {
   try {
-    // params sekarang Promise → harus await
+    // await initDB();
     const { id } = await context.params;
 
-    const article = await prisma.artikel.findUnique({
-      where: { id: Number(id) },
-    });
-
-    if (!article) {
+    const artikel = await Artikel.findByPk(id); // by primary key
+    if (!artikel) {
       return NextResponse.json(
         { error: "Artikel tidak ditemukan" },
         { status: 404 }
       );
     }
 
-    return NextResponse.json(article, { status: 200 });
+    return NextResponse.json(artikel, { status: 200 });
   } catch (err) {
     console.error("Error get artikel:", err);
     return NextResponse.json({ error: "Gagal ambil artikel" }, { status: 500 });
   }
 }
 
-// PUT /api/articles/[id]
-export async function PUT(req, { params }) {
+// PUT /api/artikel/[id]
+export async function PUT(req, context) {
   try {
-    const { id } = params;
+    // await initDB();
+    const { id } = await context.params;
     const body = await req.json();
     const { title, imageUrl, content } = body;
 
-    const artikel = await prisma.artikel.update({
-      where: { id: Number(id) },
-      data: { title, imageUrl, content },
-    });
+    const artikel = await Artikel.findByPk(id);
+    if (!artikel) {
+      return NextResponse.json(
+        { error: "Artikel tidak ditemukan" },
+        { status: 404 }
+      );
+    }
+
+    await artikel.update({ title, imageUrl, content });
 
     return NextResponse.json(artikel);
   } catch (error) {
+    console.error("Update artikel error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
-// DELETE /api/articles/[id]
-export async function DELETE(req, { params }) {
+// DELETE /api/artikel/[id]
+export async function DELETE(req, context) {
   try {
-    const { id } = params;
+    // await initDB();
+    // const { params } = await context;
+    const { id } = await context.params;
 
-    await prisma.artikel.delete({
-      where: { id: Number(id) },
-    });
+    const artikel = await Artikel.findByPk(id);
+    if (!artikel) {
+      return NextResponse.json(
+        { error: "Artikel tidak ditemukan" },
+        { status: 404 }
+      );
+    }
 
-    return NextResponse.json({ message: "Article deleted" });
+    if (artikel.imageUrl) {
+      const fileName = artikel.imageUrl.split("/").pop();
+      const filePath = path.join(process.cwd(), "public", "uploads", fileName);
+      try {
+        await unlink(filePath);
+      } catch {
+        console.warn("File tidak ditemukan:", filePath);
+      }
+    }
+
+    await artikel.destroy();
+    return NextResponse.json({ message: "Artikel berhasil dihapus" });
   } catch (error) {
+    console.error("Delete artikel error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

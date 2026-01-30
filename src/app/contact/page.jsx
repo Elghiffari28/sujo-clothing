@@ -13,25 +13,25 @@ const page = () => {
               <span className="text-green-500">
                 <FaMobile size={24} />
               </span>
-              082120764767
+              082227522502
             </p>
             <p className="flex gap-1 items-center justify-center md:justify-start text-center">
               <span className="text-green-500">
                 <FaPhone size={20} />
               </span>
-              082120764767
+              082219100276
             </p>
             <p className="flex gap-1 items-center justify-center md:justify-start text-center">
               <span className="text-green-500">
                 <FaPhone size={20} />
               </span>
-              082120764767
+              083150620978
             </p>
             <p className="flex gap-1 items-center justify-center md:justify-start text-center break-all">
               <span className="text-green-500">
                 <FaEnvelope size={20} />
               </span>
-              sujocustomart@gmail.com
+              sujoclothing@gmail.com
             </p>
           </div>
           <div>

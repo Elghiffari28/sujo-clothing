@@ -63,26 +63,32 @@ const page = () => {
           />
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          {testimoni.map((item) => (
-            <div
-              key={item.id}
-              className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white"
-            >
-              <div className="relative w-full h-40">
-                <Image
-                  src={item.imageUrl}
-                  alt={item.keterangan}
-                  fill
-                  className="object-cover"
-                />
+          {testimoni && testimoni.length > 0 ? (
+            testimoni.map((item) => (
+              <div
+                key={item.id}
+                className="border rounded-lg overflow-hidden shadow hover:shadow-lg transition bg-white"
+              >
+                <div className="relative w-full h-40">
+                  <Image
+                    src={`/api${item.imageUrl}`}
+                    alt={item.keterangan}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-3">
+                  <p className="text-xs text-gray-600 line-clamp-2">
+                    {item.keterangan}
+                  </p>
+                </div>
               </div>
-              <div className="p-3">
-                <p className="text-xs text-gray-600 line-clamp-2">
-                  {item.keterangan}
-                </p>
-              </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="col-span-full text-center text-gray-500">
+              Belum ada testimoni
+            </p>
+          )}
         </div>
       </div>
     </div>

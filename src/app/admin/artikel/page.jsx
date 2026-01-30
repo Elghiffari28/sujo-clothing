@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Editor from "@/components/Editor";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
+import { SimpleEditor } from "@/components/tiptap-templates/simple/simple-editor";
 
 // export const metadata = {
 //   title: "Daftar Artikel | Sujo Clothing",
@@ -49,7 +51,12 @@ export default function NewArticlePage() {
   };
   return (
     <div className="py-12 bg-white">
+      {/* <div className="container px-12">
+        <div className="min-h-[200px] max-h-[400px] overflow-y-hidden">
+        </div>
+      </div> */}
       <Editor />
+
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-6">Daftar Artikel</h1>
 
@@ -62,14 +69,11 @@ export default function NewArticlePage() {
               {artikel.imageUrl && (
                 <div className="relative w-full h-48">
                   <Image
-                    src={
-                      artikel.imageUrl.startsWith("http")
-                        ? artikel.imageUrl
-                        : `${artikel.imageUrl}`
-                    }
+                    src={`/api${artikel.imageUrl}`}
                     alt={artikel.title}
                     fill
                     className="object-cover"
+                    unoptimized
                   />
                 </div>
               )}
@@ -87,12 +91,17 @@ export default function NewArticlePage() {
                 </p>
 
                 <div className="mt-auto pt-4">
-                  <button
+                  <motion.button
+                    whileTap={{
+                      scale: 0.9,
+                      boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+                    }}
+                    transition={{ duration: 0.2 }}
                     onClick={() => handleDelete(artikel.id)}
                     className="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded text-sm transition"
                   >
                     Hapus
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </div>

@@ -1,23 +1,38 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { writeFile, unlink } from "fs/promises";
+import path from "path";
+import { Testimoni, initDB } from "@/lib/db";
 
-export async function GET(req, { params }) {
-  const { id } = params;
-  const testimoni = await prisma.testimoni.findUnique({
-    where: { id: Number(id) },
-  });
-  if (!testimoni) return Response.json({ error: "Not found" }, { status: 404 });
-  return Response.json(testimoni);
+// GET /api/testimoni/[id]
+export async function GET(req, context) {
+  try {
+    // await initDB();
+    const { id } = await context.params;
+    const testimoni = await Testimoni.findByPk(Number(id));
+
+    if (!testimoni) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(testimoni);
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }
 
-export async function PUT(req, { params }) {
+// PUT /api/testimoni/[id]
+export async function PUT(req, context) {
   try {
-    const { id } = params;
+    // await initDB();
+    const { params } = await context;
+    const id = parseInt(params.id, 10);
+    if (isNaN(id)) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    }
 
     let keterangan = "";
     let file = null;
 
-    // cek content-type request
     const contentType = req.headers.get("content-type") || "";
     if (contentType.includes("multipart/form-data")) {
       const formData = await req.formData();
@@ -28,57 +43,58 @@ export async function PUT(req, { params }) {
       keterangan = body.keterangan;
     }
 
-    // ambil testimoni lama
-    const existing = await prisma.testimoni.findUnique({
-      where: { id: Number(id) },
-    });
+    const existing = await Testimoni.findByPk(id);
+    if (!existing) {
+      return NextResponse.json(
+        { error: "Data tidak ditemukan" },
+        { status: 404 }
+      );
+    }
 
     let imageUrl = existing.imageUrl;
 
-    // kalau ada file baru → hapus lama + upload baru
     if (file) {
+      // hapus file lama
       if (existing.imageUrl) {
         const oldFile = existing.imageUrl.split("/").pop();
-        await supabase.storage.from("testimoni").remove([oldFile]);
+        const oldPath = path.join(process.cwd(), "public", "uploads", oldFile);
+        try {
+          await unlink(oldPath);
+        } catch {
+          console.warn("File lama tidak ditemukan:", oldPath);
+        }
       }
 
+      // simpan file baru
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
       const fileName = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`;
-      const { data, error } = await supabase.storage
-        .from("testimoni")
-        .upload(fileName, file);
+      const filePath = path.join(process.cwd(), "public", "uploads", fileName);
 
-      if (error) throw error;
-
-      const { data: publicUrl } = supabase.storage
-        .from("testimoni")
-        .getPublicUrl(fileName);
-
-      imageUrl = publicUrl.publicUrl;
+      await writeFile(filePath, buffer);
+      imageUrl = `/uploads/${fileName}`;
     }
 
-    // update DB
-    const updated = await prisma.testimoni.update({
-      where: { id: Number(id) },
-      data: {
-        ...(keterangan && { keterangan }),
-        imageUrl,
-      },
+    await existing.update({
+      ...(keterangan && { keterangan }),
+      imageUrl,
     });
 
-    return NextResponse.json(updated);
-  } catch (e) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    return NextResponse.json(existing);
+  } catch (err) {
+    console.error("PUT testimoni error:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
+// DELETE /api/testimoni/[id]
 export async function DELETE(req, context) {
   try {
-    const { id } = await context.params; // ⬅️ harus pakai await sekarang
-
-    // ambil testimoni lama dulu biar bisa hapus file
-    const existing = await prisma.testimoni.findUnique({
-      where: { id: Number(id) },
-    });
+    // await initDB();
+    const { params } = await context;
+    const id = parseInt(params.id, 10);
+    const existing = await Testimoni.findByPk(id);
 
     if (!existing) {
       return NextResponse.json(
@@ -87,17 +103,20 @@ export async function DELETE(req, context) {
       );
     }
 
-    // kalau ada gambar → hapus dari Supabase Storage
     if (existing.imageUrl) {
-      const oldFile = existing.imageUrl.split("/").pop();
-      await supabase.storage.from("testimoni").remove([oldFile]);
+      const fileName = existing.imageUrl.split("/").pop();
+      const filePath = path.join(process.cwd(), "public", "uploads", fileName);
+      try {
+        await unlink(filePath);
+      } catch {
+        console.warn("File tidak ditemukan:", filePath);
+      }
     }
 
-    // hapus dari DB
-    await prisma.testimoni.delete({ where: { id: Number(id) } });
+    await existing.destroy();
 
     return NextResponse.json({ success: true });
-  } catch (e) {
-    return NextResponse.json({ error: e.message }, { status: 500 });
+  } catch (err) {
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }

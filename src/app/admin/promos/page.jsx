@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 export default function PromoAdmin() {
   const [promos, setPromos] = useState([]);
@@ -72,6 +73,10 @@ export default function PromoAdmin() {
         alert("Upload gambar gagal");
         return;
       }
+      // } else {
+      //   // alert("tes");
+      //   // console.log("object");
+      // }
 
       const { url } = await uploadRes.json();
       imageUrl = url;
@@ -111,12 +116,17 @@ export default function PromoAdmin() {
     setTitle(promo.title);
     setDescription(promo.description);
     setEditingId(promo.id);
-    setCurrentImageUrl(promo.imageUrl); // simpan gambar lama
+    setCurrentImageUrl(`/api${promo.imageUrl}`); // simpan gambar lama
   }
 
   async function deletePromo(id) {
-    await fetch(`/api/promos/${id}`, { method: "DELETE" });
-    fetchPromos();
+    if (!confirm("Yakin mau hapus promo ini?")) return;
+    try {
+      await fetch(`/api/promos/${id}`, { method: "DELETE" });
+      fetchPromos();
+    } catch (error) {
+      alert("gagal hapus");
+    }
   }
 
   useEffect(() => {
@@ -169,65 +179,97 @@ export default function PromoAdmin() {
           />
         ) : null}
 
-        <button className="bg-blue-600 hover:bg-blue-700 transition text-white px-5 py-2 rounded w-full md:w-auto">
+        <motion.button
+          whileTap={{ scale: 0.9, boxShadow: "0 0 15px rgba(0,0,0,0.3)" }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.2 }}
+          className="bg-blue-600 hover:bg-blue-700 transition text-white px-5 py-2 rounded w-full md:w-auto"
+        >
           {editingId ? "Update Promo" : "Tambah Promo"}
-        </button>
+        </motion.button>
       </form>
 
       {/* List Promo */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {promos.map((p) => (
-          <div
-            key={p.id}
-            className="border rounded-lg shadow-sm p-4 flex flex-col justify-between"
-          >
-            <div>
-              <h2 className="font-semibold text-lg">{p.title}</h2>
-              <p className="text-gray-600 text-sm mt-1">{p.description}</p>
-              <img
-                src={p.imageUrl}
-                alt={p.title}
-                className="w-full h-40 object-cover mt-3 rounded"
-              />
-              <p className="mt-2 text-sm">
-                Status:{" "}
-                <span
-                  className={`font-medium ${
-                    p.isActive ? "text-green-600" : "text-gray-500"
+        {promos && promos.length > 0 ? (
+          promos.map((p) => (
+            <div
+              key={p.id}
+              className="border rounded-lg shadow-sm p-4 flex flex-col justify-between"
+            >
+              <div>
+                <h2 className="font-semibold text-lg">{p.title}</h2>
+                <p className="text-gray-600 text-sm mt-1">{p.description}</p>
+                {p.imageUrl && (
+                  <img
+                    src={`/api${p.imageUrl}`}
+                    alt={p.title}
+                    className="w-full h-40 object-cover mt-3 rounded"
+                  />
+                )}
+                <p className="mt-2 text-sm">
+                  Status:{" "}
+                  <span
+                    className={`font-medium ${
+                      p.isActive ? "text-green-600" : "text-gray-500"
+                    }`}
+                  >
+                    {p.isActive ? "Aktif" : "Nonaktif"}
+                  </span>
+                </p>
+              </div>
+
+              <div className="flex gap-2 mt-4">
+                <motion.button
+                  whileTap={{
+                    scale: 0.9,
+                    boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => togglePromo(p.id, !p.isActive)}
+                  className={`flex-1 px-3 py-2 rounded text-white text-sm transition ${
+                    p.isActive
+                      ? "bg-green-500 hover:bg-green-600"
+                      : "bg-gray-500 hover:bg-gray-600"
                   }`}
                 >
-                  {p.isActive ? "Aktif" : "Nonaktif"}
-                </span>
-              </p>
+                  {p.isActive ? "Nonaktifkan" : "Aktifkan"}
+                </motion.button>
+                <motion.button
+                  whileTap={{
+                    scale: 0.9,
+                    boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => handleEdit(p)}
+                  className="flex-1 bg-yellow-500 hover:bg-yellow-600 px-3 py-2 rounded text-white text-sm transition"
+                >
+                  Edit
+                </motion.button>
+                <motion.button
+                  whileTap={{
+                    scale: 0.9,
+                    boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+                  }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                  onClick={() => deletePromo(p.id)}
+                  className="flex-1 bg-red-600 hover:bg-red-700 px-3 py-2 rounded text-white text-sm transition"
+                >
+                  Hapus
+                </motion.button>
+              </div>
             </div>
-
-            <div className="flex gap-2 mt-4">
-              <button
-                onClick={() => togglePromo(p.id, !p.isActive)}
-                className={`flex-1 px-3 py-2 rounded text-white text-sm transition ${
-                  p.isActive
-                    ? "bg-green-500 hover:bg-green-600"
-                    : "bg-gray-500 hover:bg-gray-600"
-                }`}
-              >
-                {p.isActive ? "Nonaktifkan" : "Aktifkan"}
-              </button>
-              <button
-                onClick={() => handleEdit(p)}
-                className="flex-1 bg-yellow-500 hover:bg-yellow-600 px-3 py-2 rounded text-white text-sm transition"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => deletePromo(p.id)}
-                className="flex-1 bg-red-600 hover:bg-red-700 px-3 py-2 rounded text-white text-sm transition"
-              >
-                Hapus
-              </button>
-            </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p className="col-span-full text-center text-gray-500 mt-4">
+            Tidak ada promo saat ini.
+          </p>
+        )}
       </div>
+
       <div className="mt-6">
         <Link
           href="/admin"

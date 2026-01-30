@@ -12,10 +12,12 @@ export async function POST(req) {
     }
 
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "mail.sujocustomart.com", // ganti sesuai hosting
+      port: 465, // biasanya 465 (SSL) atau 587 (TLS)
+      secure: true, // true kalau pakai 465, false kalau pakai 587
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.EMAIL_USER, // contoh: no-reply@sujocustomart.com
+        pass: process.env.EMAIL_PASS, // password email hosting
       },
     });
 

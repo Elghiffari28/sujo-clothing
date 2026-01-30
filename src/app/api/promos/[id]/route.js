@@ -1,35 +1,84 @@
-import prisma from "@/lib/prisma";
+import { NextResponse } from "next/server";
+import { Promo, initDB } from "@/lib/db";
+import path from "path";
+import { unlink } from "fs/promises";
 
-export async function GET(req, { params }) {
-  const { id } = params;
-  const promo = await prisma.promo.findUnique({ where: { id: Number(id) } });
-  if (!promo) return Response.json({ error: "Not found" }, { status: 404 });
-  return Response.json(promo);
-}
-
-export async function PUT(req, { params }) {
+// GET /api/promos/[id]
+export async function GET(req, context) {
   try {
-    const { id } = params;
-    const body = await req.json();
+    // await initDB();
+    const { id } = await context.params;
+    const promo = await Promo.findByPk(id);
 
-    const updated = await prisma.promo.update({
-      where: { id: Number(id) },
-      data: {
-        ...(body.title && { title: body.title }),
-        ...(body.description && { description: body.description }),
-        ...(body.imageUrl && { imageUrl: body.imageUrl }),
-        ...(typeof body.isActive === "boolean" && { isActive: body.isActive }),
-      },
-    });
+    if (!promo) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
 
-    return Response.json(updated);
-  } catch (e) {
-    return Response.json({ error: e.message }, { status: 400 });
+    return NextResponse.json(promo);
+  } catch (err) {
+    console.error("Error GET promo:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
 
-export async function DELETE(req, { params }) {
-  const { id } = params;
-  await prisma.promo.delete({ where: { id: Number(id) } });
-  return Response.json({ success: true });
+// PUT /api/promos/[id]
+export async function PUT(req, context) {
+  try {
+    // await initDB();
+    const { params } = await context;
+    const id = parseInt(params.id, 10);
+    if (isNaN(id)) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
+    }
+
+    const body = await req.json();
+    const promo = await Promo.findByPk(id);
+
+    if (!promo) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    await promo.update({
+      ...(body.title && { title: body.title }),
+      ...(body.description && { description: body.description }),
+      ...(body.imageUrl && { imageUrl: body.imageUrl }),
+      ...(typeof body.isActive === "boolean" && { isActive: body.isActive }),
+    });
+
+    return NextResponse.json(promo);
+  } catch (err) {
+    console.error("Error PUT promo:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
+}
+
+// DELETE /api/promos/[id]
+export async function DELETE(req, context) {
+  try {
+    // await initDB();
+    const { params } = await context;
+    const { id } = params;
+    const promo = await Promo.findByPk(id);
+    console.log(id);
+
+    if (!promo) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
+
+    if (promo.imageUrl) {
+      const fileName = promo.imageUrl.split("/").pop();
+      const filePath = path.join(process.cwd(), "public", "uploads", fileName);
+      try {
+        await unlink(filePath);
+      } catch {
+        console.warn("File tidak ditemukan:", filePath);
+      }
+    }
+
+    await promo.destroy();
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error("Error DELETE promo:", err);
+    return NextResponse.json({ error: err.message }, { status: 500 });
+  }
 }

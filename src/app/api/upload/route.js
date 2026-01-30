@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { writeFile } from "fs/promises";
+import path from "path";
+import fs from "fs";
 
 export async function POST(req) {
   try {
@@ -10,24 +12,41 @@ export async function POST(req) {
       return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
     }
 
-    // generate nama unik
-    const fileName = `${Date.now()}-${file.name}`;
+    // convert file ke buffer
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
 
-    // upload ke Supabase Storage (bucket: "testimoni")
-    const { data, error } = await supabase.storage
-      .from("testimoni")
-      .upload(fileName, file);
+    // bikin nama unik
+    const originalName = file.name || "file.jpg";
+    // const ext = path.extname(originalName); // contoh: ".png"
+    // const baseName = path.basename(originalName, ext);
+    const sanitizedFileName = originalName
+      .replace(/\s+/g, "-")
+      .replace(/[^a-zA-Z0-9.\-_]/g, "");
+    const fileName = `${Date.now()}-${sanitizedFileName}`;
+    const filePath = path.join(process.cwd(), "uploads", fileName);
 
-    if (error) throw error;
+    // simpan ke folder /public/uploads
+    await writeFile(filePath, buffer);
 
-    // ambil public URL
-    const { data: publicUrl } = supabase.storage
-      .from("testimoni")
-      .getPublicUrl(fileName);
+    // URL akses publik
+    const url = `/uploads/${fileName}`;
 
-    return NextResponse.json({ url: publicUrl.publicUrl });
+    return NextResponse.json({ url });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
+export const deleteFile = (filePath) => {
+  try {
+    if (fs.existsSync(filePath)) {
+      fs.unlinkSync(filePath);
+      console.log(`File deleted: ${filePath}`);
+    } else {
+      console.log(`File not found: ${filePath}`);
+    }
+  } catch (err) {
+    console.error("Error deleting file:", err);
+  }
+};

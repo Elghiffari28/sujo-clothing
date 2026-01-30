@@ -14,16 +14,20 @@ export default function Home() {
 
   useEffect(() => {
     const videos = videosRef.current;
+    // console.log("All videos in ref:", videos); // cek isinya
 
-    // Hero video main langsung
-    if (videos[0]) videos[0].play();
+    if (videos[0]) {
+      // console.log("Playing hero:", videos[0]);
+      videos[0].play().catch((err) => console.log("Hero play blocked:", err));
+    }
 
-    // Observer untuk video lainnya
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.play();
+            entry.target
+              .play()
+              .catch((err) => console.log("Play blocked:", err));
           } else {
             entry.target.pause();
           }
@@ -40,6 +44,7 @@ export default function Home() {
 
     return () => observer.disconnect();
   }, []);
+
   return (
     <div className="items-center justify-items-center min-h-screen">
       <section className="w-full">
@@ -78,7 +83,7 @@ export default function Home() {
           <div className="md:w-1/2 flex justify-center items-center">
             <div>
               <Image
-                src={"https://placehold.co/600x400"}
+                src={"/jahit.png"}
                 width={250}
                 height={250}
                 alt="Foto Beranda"
@@ -109,28 +114,15 @@ export default function Home() {
             Videonya !
           </p>
         </div>
-        <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-          <div>
-            <video
-              ref={(el) => (videosRef.current[1] = el)}
-              className="w-full h-[400px] object-cover"
-              muted
-              loop
-              playsInline
-            >
-              <source src="/videos/hero.mp4" type="video/mp4" />
-            </video>
-          </div>
-          <div>
-            <video
-              ref={(el) => (videosRef.current[2] = el)}
-              className="w-full h-[400px] object-cover"
-              muted
-              loop
-              playsInline
-            >
-              <source src="/videos/video2.mp4" type="video/mp4" />
-            </video>
+        <div className="flex items-center justify-center">
+          <div className="w-1/2">
+            <iframe
+              className="w-full aspect-video"
+              src="https://www.youtube.com/embed/L0rmpG1yxAQ"
+              title="YouTube video player"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
           </div>
         </div>
       </section>
@@ -156,7 +148,7 @@ export default function Home() {
             </div>
             <div className="md:w-1/2 flex items-center">
               <video
-                ref={(el) => (videosRef.current[1] = el)}
+                ref={(el) => (videosRef.current[3] = el)}
                 className="w-full  object-cover z-0"
                 muted
                 loop
@@ -318,15 +310,22 @@ export default function Home() {
           </div>
           <div className="flex gap-4 flex-col md:flex-row mt-8">
             <div className="md:w-1/2 px-8 flex justify-center items-center">
-              <video
-                ref={(el) => (videosRef.current[1] = el)}
+              <iframe
+                className="w-full aspect-video"
+                src="https://www.youtube.com/embed/MGrg9LA1lu0"
+                title="YouTube video player"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+              {/* <video
+                ref={(el) => (videosRef.current[4] = el)}
                 className="w-full  object-cover"
                 muted
                 loop
                 playsInline
               >
                 <source src="/videos/hero.mp4" type="video/mp4" />
-              </video>
+              </video> */}
             </div>
             <div className="md:w-1/2 px-4">
               <h1 className="font-black md:text-2xl lg:text-3xl mb-2">
@@ -365,13 +364,13 @@ export default function Home() {
           </div>
           <div className="text-white flex gap-4 md:gap-24 px-4  lg:gap-52 justify-center mt-6 mb-4">
             <Link
-              href={"/"}
+              href={"https://wa.me/6282227522502"}
               className="p-2 md:p-4 bg-primary rounded-lg shadow-lg"
             >
               WhatsApp Admin 1
             </Link>
             <Link
-              href={"/"}
+              href={"https://wa.me/6282219100276"}
               className="p-2 md:p-4 bg-primary rounded-lg shadow-lg"
             >
               WhatsApp Admin 2

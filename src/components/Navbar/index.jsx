@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import Navlink from "./Navlink";
-import { MessageCircleMore } from "lucide-react";
 import {
   FaFacebookF,
   FaInstagram,
@@ -13,6 +12,7 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { products } from "@/lib/products";
 
 const Navbar = () => {
@@ -60,6 +60,10 @@ const Navbar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleNavClick = () => {
+    setIsOpen(false);
+  };
   return (
     <nav className="bg-primary pt-4 fixed  w-full top-0 left-0 z-20">
       <div className="flex flex-col items-center justify-center mb-2">
@@ -111,23 +115,32 @@ const Navbar = () => {
           {/* Tulisan Tengah */}
           <div className="absolute lg:left-1/2 lg:-translate-x-1/2 flex gap-3 text-white text-xs md:text-sm whitespace-nowrap">
             <p className="hidden md:block">Produsen Pakaian Custom</p>
-            <p>0829038294382</p>
-            <p>0829038294382</p>
-            <p className="hidden md:block">ljhkjhk@gmail.com</p>
+            <p>+6282227522502</p>
+            <p>+6282219100276</p>
+            <p className="hidden md:block">sujoclothing@gmail.com</p>
           </div>
 
           {/* Sosmed kanan */}
           <div className="flex space-x-3 text-white ml-auto">
-            <Link href="/">
+            <Link
+              href="https://www.facebook.com/profile.php?id=100094128155580&mibextid=ZbWKwL"
+              target="_blank"
+            >
               <FaFacebookF size={18} />
             </Link>
-            <Link href="/">
+            <Link
+              href="https://www.instagram.com/sujocustom.art?igsh=MTJnbDduZmt6aWVxMQ=="
+              target="_blank"
+            >
               <FaInstagram size={18} />
             </Link>
-            <Link href="/">
+            <Link href="https://www.youtube.com/@SCA-APPAREL" target="_blank">
               <FaYoutube size={18} />
             </Link>
-            <Link href="/">
+            <Link
+              href="https://www.tiktok.com/@sujocustom.art?_t=ZS-8z44FklLjL0&_r=1"
+              target="_blank"
+            >
               <FaTiktok size={18} />
             </Link>
           </div>
@@ -150,28 +163,55 @@ const Navbar = () => {
             <Navlink />
           </div>
           {/* WhatsApp button (desktop & mobile) */}
-          <div className="hidden md:flex h-12 mx-4 rounded-xl shadow-xl items-center px-3 py-2 bg-primary max-w-[180px]">
+          <motion.div
+            whileTap={{ scale: 0.9, boxShadow: "0 0 15px rgba(0,0,0,0.3)" }}
+            whileHover={{ scale: 1.05 }}
+            className="hidden md:flex h-12 mx-4 rounded-xl shadow-xl items-center px-3 py-2 bg-primary max-w-[180px]"
+          >
             <p className="font-semibold text-white flex gap-1 items-center text-center leading-tight text-xs lg:text-base">
               <FaWhatsapp size={40} />
-              <span className="break-words">Chat With us Now</span>
+              <Link
+                href={"https://wa.me/6282227522502"}
+                className="break-words"
+              >
+                Chat With us Now
+              </Link>
             </p>
-          </div>
+          </motion.div>
 
           {/* Hamburger (Mobile Only) */}
-          <button
+          <motion.button
+            whileTap={{ scale: 0.9, boxShadow: "0 0 15px rgba(0,0,0,0.3)" }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
             className="md:hidden text-black focus:outline-none"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-          </button>
+          </motion.button>
         </div>
         {isOpen && (
-          <div
-            className="absolute w-52 px-2 py-3 right-0 md:hidden bg-gray-200 h-fit shadow-2xl border-t border-gray-700"
-            ref={ref}
-          >
-            <Navlink />
-          </div>
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                ref={ref}
+                key="mobile-menu"
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ duration: 0.25 }} // speed animasi
+                className="absolute w-52 px-2 py-3 right-0 md:hidden bg-gray-200 h-fit shadow-2xl border-t border-gray-700 rounded-lg"
+              >
+                <Navlink closeMenu={() => setIsOpen(false)} />
+              </motion.div>
+            )}
+          </AnimatePresence>
+          // <div
+          //   className="absolute w-52 px-2 py-3 right-0 md:hidden bg-gray-200 h-fit shadow-2xl border-t border-gray-700"
+          //   ref={ref}
+          // >
+          //   <Navlink closeMenu={() => setIsOpen(false)} />
+          // </div>
         )}
       </div>
     </nav>

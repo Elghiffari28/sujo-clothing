@@ -39,7 +39,7 @@ const page = () => {
                     height={250}
                     alt="Foto Beranda"
                     unoptimized
-                    className="w-full"
+                    className="w-full md:h-96 object-cover"
                   />
                   <h3 className="text-center font-semibold mt-4 md:text-xl">
                     {contoh.nama}
@@ -64,7 +64,7 @@ const page = () => {
                     height={250}
                     alt="Foto Beranda"
                     unoptimized
-                    className="w-full"
+                    className="w-full md:h-96 object-cover"
                   />
                   <h3 className="text-center font-semibold mt-4 md:text-xl">
                     {print.nama}

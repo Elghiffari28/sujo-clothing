@@ -4,6 +4,14 @@ export function middleware(req) {
   const { pathname } = req.nextUrl;
   // console.log("MIDDLEWARE KEPAKE:", req.nextUrl.pathname);
 
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/favicon") ||
+    pathname.startsWith("/api")
+  ) {
+    return NextResponse.next();
+  }
+
   // cek kalau akses ke /admin tapi belum login
   if (pathname.startsWith("/admin")) {
     const isAdmin = req.cookies.get("isAdmin")?.value;

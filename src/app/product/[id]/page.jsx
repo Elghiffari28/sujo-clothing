@@ -42,7 +42,7 @@ const page = () => {
                     height={250}
                     alt={`Foto Beranda ${idx}`}
                     unoptimized
-                    className="w-full mb-8"
+                    className="w-full md:w-[700px] lg:w-[800px] mb-2"
                   />
                 ))
               ) : (
@@ -52,7 +52,7 @@ const page = () => {
                   height={250}
                   alt="Foto Beranda"
                   unoptimized
-                  className="w-full"
+                  className="w-full md:w-[700px] lg:w-[800px]"
                 />
               )}
             </div>
@@ -61,11 +61,11 @@ const page = () => {
 
         <div className="flex flex-col justify-center items-center">
           {product.materials?.length > 0 && (
-            <div className="w-full">
+            <div className="w-full flex flex-col items-center justify-center">
               <h1 className="text-center font-bold text-2xl md:text-3xl lg:text-4xl">
                 Material
               </h1>
-              <div className="flex justify-center flex-wrap w-full">
+              <div className="flex justify-center flex-wrap w-full md:w-[700px] lg:w-[900px] xl:w-[1200px] ">
                 {product.materials.map((material, index) => (
                   <div
                     key={index}
@@ -88,11 +88,11 @@ const page = () => {
             </div>
           )}
 
-          <div className="w-full mt-8">
+          <div className="w-full flex flex-col items-center justify-center">
             <h1 className="text-center font-bold text-2xl md:text-3xl lg:text-4xl">
               Contoh Desain
             </h1>
-            <div className="flex flex-wrap justify-center w-full">
+            <div className="flex justify-center flex-wrap w-full md:w-[700px] lg:w-[900px] xl:w-[1200px] ">
               {product.contoh_desain.map((contoh, index) => (
                 <div
                   key={index}

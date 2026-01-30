@@ -1,22 +1,36 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { Promo, initDB } from "@/lib/db";
 
+// GET /api/promos
 export async function GET() {
-  const promos = await prisma.promo.findMany({
-    orderBy: { createdAt: "desc" },
-  });
-  return Response.json(promos);
+  try {
+    // await initDB();
+    const promos = await Promo.findAll({
+      order: [["createdAt", "DESC"]],
+    });
+    return NextResponse.json(promos);
+  } catch (err) {
+    console.error("Error ambil promos:", err);
+    return NextResponse.json({ error: "Gagal ambil promos" }, { status: 500 });
+  }
 }
 
+// POST /api/promos
 export async function POST(req) {
-  const { title, description, imageUrl } = await req.json();
-  const promo = await prisma.promo.create({
-    data: {
+  try {
+    // await initDB();
+    const { title, description, imageUrl } = await req.json();
+    console.log(imageUrl);
+    const promo = await Promo.create({
       title,
       description,
       imageUrl,
-      isActive: true, // default aktif
-    },
-  });
-  return NextResponse.json(promo);
+      isActive: true,
+    });
+
+    return NextResponse.json(promo, { status: 201 });
+  } catch (err) {
+    console.error("Error buat promo:", err);
+    return NextResponse.json({ error: "Gagal buat promo" }, { status: 500 });
+  }
 }

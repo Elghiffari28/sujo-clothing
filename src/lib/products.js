@@ -53,10 +53,10 @@ export const products = [
       { id: 4, nama: "Straw", foto: "/images/jersey/straw.jpg" },
     ],
     contoh_desain: [
-      { id: 1, nama: "Geometrik", foto: "/images/jersey/geometrik.jpg" },
-      { id: 2, nama: "Milano", foto: "/images/jersey/milano.jpg" },
-      { id: 3, nama: "Serena", foto: "/images/jersey/serena.jpg" },
-      { id: 4, nama: "Straw", foto: "/images/jersey/straw.jpg" },
+      { id: 1, nama: "Futsal", foto: "/images/jersey/futsal.jpg" },
+      { id: 2, nama: "Basket", foto: "/images/jersey/basket.jpg" },
+      { id: 3, nama: "Voli", foto: "/images/jersey/jersey1.jpg" },
+      { id: 4, nama: "Football", foto: "/images/jersey/football.jpg" },
     ],
   },
   {

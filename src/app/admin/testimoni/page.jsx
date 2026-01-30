@@ -128,8 +128,14 @@ const page = () => {
   }
 
   async function deleteTesti(id) {
-    await fetch(`/api/testimoni/${id}`, { method: "DELETE" });
-    getTesti();
+    if (!confirm("Yakin mau hapus testimoni ini?")) return;
+    try {
+      await fetch(`/api/testimoni/${id}`, { method: "DELETE" });
+      getTesti();
+    } catch (error) {
+      console.error(error);
+      alert("Gagal Hapus Testimoni");
+    }
   }
 
   useEffect(() => {
@@ -170,6 +176,7 @@ const page = () => {
                 alt="Preview"
                 width={100}
                 height={100}
+                unoptimized
                 className="w-36 md:w-48 rounded-lg shadow-md border"
               />
             </div>
@@ -182,36 +189,42 @@ const page = () => {
 
         {/* Daftar Testimoni */}
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {testimonis.map((p) => (
-            <div
-              key={p.id}
-              className="bg-white border rounded-xl shadow hover:shadow-md transition p-5 flex flex-col"
-            >
-              <p className="text-gray-700 text-sm mb-3">{p.keterangan}</p>
-              <Image
-                src={p.imageUrl}
-                alt={p.keterangan}
-                width={100}
-                height={100}
-                className="w-full h-40 object-cover rounded-lg mb-4"
-              />
+          {testimonis && testimonis.length > 0 ? (
+            testimonis.map((p) => (
+              <div
+                key={p.id}
+                className="bg-white border rounded-xl shadow hover:shadow-md transition p-5 flex flex-col"
+              >
+                <p className="text-gray-700 text-sm mb-3">{p.keterangan}</p>
+                <Image
+                  src={`/api${p.imageUrl}`}
+                  alt={p.keterangan}
+                  width={100}
+                  height={100}
+                  className="w-full h-40 object-cover rounded-lg mb-4"
+                />
 
-              <div className="flex gap-3 mt-auto">
-                <button
-                  onClick={() => handleEdit(p)}
-                  className="flex-1 bg-yellow-500 hover:bg-yellow-600 px-3 py-2 rounded-lg text-white text-sm font-medium transition"
-                >
-                  ✏️ Edit
-                </button>
-                <button
-                  onClick={() => deleteTesti(p.id)}
-                  className="flex-1 bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg text-white text-sm font-medium transition"
-                >
-                  🗑️ Hapus
-                </button>
+                <div className="flex gap-3 mt-auto">
+                  {/* <button
+                    onClick={() => handleEdit(p)}
+                    className="flex-1 bg-yellow-500 hover:bg-yellow-600 px-3 py-2 rounded-lg text-white text-sm font-medium transition"
+                  >
+                    ✏️ Edit
+                  </button> */}
+                  <button
+                    onClick={() => deleteTesti(p.id)}
+                    className="flex-1 bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg text-white text-sm font-medium transition"
+                  >
+                    🗑️ Hapus
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-gray-500 col-span-full text-center">
+              Belum ada testimoni.
+            </p>
+          )}
         </div>
       </div>
 

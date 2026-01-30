@@ -12,7 +12,8 @@ const page = () => {
 
       <div className="space-y-4 flex flex-col justify-center items-center">
         <Link
-          href="https://wa.me/62xxxx"
+          href="https://wa.me/6282227522502"
+          target="_blank"
           className="block bg-green-500 text-white py-3 rounded-lg shadow-md w-full max-w-md"
         >
           <div className="flex justify-center items-center gap-4">
@@ -27,7 +28,8 @@ const page = () => {
           </div>
         </Link>
         <Link
-          href="https://shopee.co.id/produk"
+          href="https://s.shopee.co.id/20nNEYZ6pI?share_channel_code=1"
+          target="_blank"
           className="block bg-orange-500 text-white py-3 rounded-lg shadow-md w-full max-w-md "
         >
           <div className="flex justify-center items-center gap-4">
@@ -41,7 +43,8 @@ const page = () => {
           </div>
         </Link>
         <Link
-          href="https://tokopedia.com/produk"
+          href="https://tk.tokopedia.com/ZSyUDhBCJ/"
+          target="_blank"
           className="block bg-green-600 text-white py-3 rounded-lg shadow-md w-full max-w-md"
         >
           <div className="flex justify-center items-center gap-4">

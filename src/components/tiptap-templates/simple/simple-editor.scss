@@ -1,0 +1,157 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+body {
+  --tt-toolbar-height: 44px;
+  --tt-theme-text: var(--tt-gray-light-900);
+
+  .dark & {
+    --tt-theme-text: var(--tt-gray-dark-900);
+  }
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  color: var(--tt-theme-text);
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  padding: 0;
+  overscroll-behavior-y: none;
+}
+
+html,
+body {
+  overscroll-behavior-x: none;
+}
+
+html,
+body,
+#root,
+#app {
+  height: 100%;
+  background-color: var(--tt-bg-color);
+}
+
+::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--tt-scrollbar-color) transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--tt-scrollbar-color);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* --- Gaya dasar text editor tiptap --- */
+.tiptap.ProseMirror {
+  font-family: "DM Sans", sans-serif;
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+// .simple-editor-wrapper {
+//   position: relative;
+//   display: flex;
+//   flex-direction: column;
+//   width: 100%;
+//   border: 2px solid #000;
+//   border-radius: 8px;
+//   background: white;
+//   overflow: hidden;
+//   margin: 0 1rem auto; /* buat kanan kiri */
+// }
+
+/* --- Wrapper utama (bungkus toolbar + editor) --- */
+.simple-editor-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1200px; /* biar gak kepanjangan di layar lebar */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background: #fff;
+  border: 2px solid #000;
+  border-radius: 0.75rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+
+  /* 👇 margin kanan–kiri + center */
+  margin: auto; /* auto = center, 2rem = jarak atas bawah */
+  padding: 0 1.25rem; /* ruang kiri–kanan dalam */
+}
+
+/* --- Toolbar area --- */
+.simple-editor-wrapper > .Toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff;
+  border-bottom: 1px solid #000;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 4px 8px;
+  overflow-x: auto;
+  // border-bottom: 1px solid #000;
+  // width: 100%; /* garis pemisah dari konten */
+  // background: #fafafa;
+  // padding: 0.5rem 1rem;
+  // position: sticky;
+  // box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  // top: 0;
+  // z-index: 10;
+}
+
+// .simple-editor-content {
+//   flex: 1;
+//   min-height: 200px;
+//   padding: 1rem;
+//   outline: none;
+//   cursor: text;
+//   z-index: 1;
+// }
+// .simple-editor-content .ProseMirror {
+//   min-height: 200px;
+// }
+
+/* --- Area konten editor --- */
+.simple-editor-content {
+  width: 100%;
+  max-width: 100%;
+  min-height: 200px;
+  max-height: 70vh; /* batasi tinggi */
+  overflow-y: auto; /* biar bisa scroll kalau panjang */
+  padding: 1.5rem;
+  box-sizing: border-box;
+  font-size: small;
+  padding: 2rem;
+  border-top: 2px solid #000;
+  text-decoration: aqua;
+}
+
+/* --- Responsif untuk mobile --- */
+@media screen and (max-width: 480px) {
+  .simple-editor-content {
+    padding: 2rem;
+    max-height: 60vh;
+  }
+  .simple-editor-wrapper {
+    // max-width: fit-content;
+    overflow: hidden;
+    padding: 0;
+  }
+  .simple-editor-wrapper > .Toolbar {
+    width: 100%;
+    padding: 1rem;
+    max-width: fit-content;
+    overflow: hidden;
+  }
+}
